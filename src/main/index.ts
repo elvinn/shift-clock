@@ -1,7 +1,9 @@
 import { app, WebContents, RenderProcessGoneDetails } from 'electron'
-import Constants from './utils/Constants'
-import { createErrorWindow, createMainWindow } from './MainRunner'
 
+import Constants from './utils/constants'
+import { createErrorWindow } from './MainRunner'
+import { registerAutoListener } from './autoListener'
+import { shiftRecordManager } from './model'
 let mainWindow
 let errorWindow
 
@@ -18,13 +20,11 @@ app.on('ready', async () => {
   }
   */
 
-  mainWindow = await createMainWindow(mainWindow)
-})
-
-app.on('activate', async () => {
-  if (!mainWindow) {
-    mainWindow = await createMainWindow(mainWindow)
-  }
+  registerAutoListener()
+  shiftRecordManager.addRecord({
+    event: 'lock-screen',
+    timestamp: Date.now()
+  })
 })
 
 app.on('window-all-closed', () => {

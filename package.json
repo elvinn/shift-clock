@@ -1,26 +1,26 @@
 {
-  "name": "vutron",
-  "appId": "com.vutron.vutron",
+  "name": "shift-clock",
+  "appId": "com.elvinn.shift-clock",
   "version": "1.0.0",
-  "description": "Quick Start Templates for Vite + Vue 3 + Electron",
-  "homepage": "https://vutron.cdget.com",
-  "author": "jooy2 <jooy2.contact@gmail.com>",
+  "description": "Automatically record the time of going to work and getting off work.",
+  "homepage": "https://shift-clock.elvinn.wiki",
+  "author": "Elvinn <elvinn.pjw@gmail.com>",
   "license": "MIT",
   "main": "dist/main/index.js",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/jooy2/vutron.git"
+    "url": "https://github.com/elvinn/shift-clock.git"
   },
   "bugs": {
-    "url": "https://github.com/jooy2/vutron/issues"
+    "url": "https://github.com/elvinn/shift-clock/issues"
   },
   "scripts": {
     "dev": "vite",
     "dev:debug": "vite -d",
     "dev:debug:force": "vite -d --force",
     "build": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js",
-    "build:pre": "npm run format:fix && vue-tsc --noEmit && vite build",
+    "build:pre": "npm run format:fix && vite build",
     "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wml",
     "build:dir": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --dir",
     "build:mac": "npm run build:pre && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --config=buildAssets/builder/config.js --mac",
@@ -38,6 +38,8 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@notionhq/client": "^2.2.15",
+    "electron-log": "^5.2.3",
     "pinia": "^2.2.4",
     "vue": "^3.5.12",
     "vue-i18n": "^10.0.4",
@@ -65,14 +67,14 @@
     "playwright": "^1.48.1",
     "prettier": "^3.3.3",
     "tree-kill": "^1.2.2",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "vite": "^5.4.10",
     "vite-plugin-electron": "^0.28.8",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vite-plugin-eslint": "1.8.1",
     "vite-plugin-vuetify": "^2.0.4",
     "vue-eslint-parser": "9.4.3",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^2.1.10"
   },
   "overrides": {
     "vite-plugin-electron": {

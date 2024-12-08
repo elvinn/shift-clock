@@ -1,5 +1,5 @@
 import { ipcMain, shell, IpcMainEvent, dialog } from 'electron'
-import Constants from './utils/Constants'
+import Constants from './utils/constants'
 
 /*
  * IPC Communications
