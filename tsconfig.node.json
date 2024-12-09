@@ -18,6 +18,7 @@
     "buildAssets/builder",
     "tests/**/*.ts",
     "tests/**/*.mts",
-    "tests/**/*.spec.ts"
+    "tests/**/*.spec.ts",
+    "src/config.ts"
   ]
 }

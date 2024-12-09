@@ -2,8 +2,9 @@ import { Client } from '@notionhq/client'
 import log from 'electron-log/main'
 import { BaseRecord } from './recordManager'
 import { name } from '../../../package.json'
+import config from '../../config'
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN })
+const notion = new Client({ auth: config.get('notionToken') })
 
 function formatNotionProperties(data: BaseRecord): any {
   const properties: Record<string, any> = {}

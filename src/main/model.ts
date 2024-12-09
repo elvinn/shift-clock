@@ -1,4 +1,5 @@
 import { RecordManager } from './utils/recordManager'
+import config from '../config'
 
 export const originalRecordManager = new RecordManager({
   fileName: 'originalRecords'
@@ -6,5 +7,5 @@ export const originalRecordManager = new RecordManager({
 
 export const shiftRecordManager = new RecordManager({
   fileName: 'workTimeRecords',
-  notionDbId: process.env.NOTION_DATABASE_ID
+  notionDbId: config.get('notionDatabaseId')
 })

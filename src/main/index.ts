@@ -3,7 +3,7 @@ import { app, WebContents, RenderProcessGoneDetails } from 'electron'
 import Constants from './utils/constants'
 import { createErrorWindow } from './MainRunner'
 import { registerAutoListener } from './autoListener'
-import { shiftRecordManager } from './model'
+
 let mainWindow
 let errorWindow
 
@@ -21,10 +21,6 @@ app.on('ready', async () => {
   */
 
   registerAutoListener()
-  shiftRecordManager.addRecord({
-    event: 'lock-screen',
-    timestamp: Date.now()
-  })
 })
 
 app.on('window-all-closed', () => {
