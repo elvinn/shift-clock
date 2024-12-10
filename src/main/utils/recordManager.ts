@@ -46,11 +46,11 @@ export class RecordManager {
   }
 
   /**
-   * Get records by type
+   * Get records by events
    */
-  async getRecordsByTypes(types: readonly string[]): Promise<BaseRecord[]> {
+  async getRecordsByEvents(events: readonly string[]): Promise<BaseRecord[]> {
     const records = await this.storage.load()
-    return records.filter((record) => types.includes(record.type))
+    return records.filter((record) => events.includes(record.event))
   }
 
   /**

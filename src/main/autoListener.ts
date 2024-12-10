@@ -12,15 +12,23 @@ let endTimeTimestamp: number
 
 async function initTimeStamps() {
   const startRecords = await originalRecordManager
-    .getRecordsByTypes(workStartEvents)
+    .getRecordsByEvents(workStartEvents)
     .catch(() => [])
-  startTimeTimestamp =
-    startRecords.length > 0 ? startRecords[startRecords.length - 1].timestamp : Date.now()
 
-  const endRecords = await originalRecordManager.getRecordsByTypes(workEndEvents).catch(() => [])
+  const now = Date.now()
+  startTimeTimestamp =
+    startRecords.find((record) => isSameDay(record.timestamp, now))?.timestamp || 0
+
+  const endRecords = await originalRecordManager.getRecordsByEvents(workEndEvents).catch(() => [])
   endTimeTimestamp = endRecords.length > 0 ? endRecords[endRecords.length - 1].timestamp : 0
 
-  log.info(`Recover work time: ${formatTime(startTimeTimestamp)} - ${formatTime(endTimeTimestamp)}`)
+  log.info(
+    [
+      'Recover work time:',
+      `start: ${new Date(startTimeTimestamp).toLocaleString()}`,
+      `end: ${new Date(endTimeTimestamp).toLocaleDateString()}`
+    ].join(' ')
+  )
 }
 
 async function onWorkStartEventHandler(eventName: string) {
