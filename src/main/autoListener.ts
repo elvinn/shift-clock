@@ -4,7 +4,7 @@ import { originalRecordManager, shiftRecordManager } from './model'
 import { isSameDay, formatTime } from './utils/time'
 import log from 'electron-log/main'
 
-const workStartEvents = ['resume', 'unlock-screen', 'user-did-become-active'] as const
+const workStartEvents = ['app-launch', 'resume', 'unlock-screen', 'user-did-become-active'] as const
 const workEndEvents = ['suspend', 'lock-screen', 'user-did-resign-active'] as const
 
 let startTimeTimestamp: number
@@ -25,8 +25,8 @@ async function initTimeStamps() {
   log.info(
     [
       'Recover work time:',
-      `start: ${new Date(startTimeTimestamp).toLocaleString()}`,
-      `end: ${new Date(endTimeTimestamp).toLocaleDateString()}`
+      `start: ${startTimeTimestamp ? new Date(startTimeTimestamp).toLocaleString() : ''}`,
+      `end: ${endTimeTimestamp ? new Date(endTimeTimestamp).toLocaleString() : ''}`
     ].join(' ')
   )
 }
@@ -77,6 +77,7 @@ async function onWorkEndEventHandler(eventName: string) {
 
 export async function registerAutoListener() {
   await initTimeStamps()
+  onWorkStartEventHandler('app-launch')
 
   workStartEvents.forEach((event) => {
     powerMonitor.on(event as any, () => {
