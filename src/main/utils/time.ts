@@ -1,4 +1,8 @@
 export function isSameDay(timestamp1: number, timestamp2: number): boolean {
+  if (!timestamp1 || !timestamp2) {
+    return false
+  }
+
   const date1 = new Date(timestamp1)
   const date2 = new Date(timestamp2)
   return (

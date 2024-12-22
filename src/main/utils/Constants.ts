@@ -1,6 +1,7 @@
+import { app } from 'electron'
 import { join, dirname } from 'path'
-import { name, version } from '../../../package.json'
 import { fileURLToPath } from 'url'
+import { name, version } from '../../../package.json'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -23,4 +24,8 @@ export default class Constants {
 
   static APP_INDEX_URL_DEV = 'http://localhost:5173/index.html'
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
+}
+
+export function getAppDataPath() {
+  return Constants.IS_DEV_ENV ? join(__dirname, '../../data') : app.getPath('userData')
 }

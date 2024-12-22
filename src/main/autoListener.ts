@@ -1,6 +1,6 @@
 import { app, powerMonitor, Notification } from 'electron'
 
-import { originalRecordManager, shiftRecordManager } from './model'
+import { originalRecordsDb, shiftRecordsDb, ShiftRecordEvent, OriginalRecord } from './db'
 import { isSameDay, formatTime } from './utils/time'
 import log from 'electron-log/main'
 
@@ -11,29 +11,33 @@ let startTimeTimestamp: number
 let endTimeTimestamp: number
 
 async function initTimeStamps() {
-  const startRecords = await originalRecordManager
-    .getRecordsByEvents(workStartEvents)
-    .catch(() => [])
+  const lastStartRecord: OriginalRecord | null = await originalRecordsDb
+    .findOneAsync({ event: { $in: workStartEvents } })
+    .sort({ timestamp: -1 })
+    .catch(() => null)
 
   const now = Date.now()
-  startTimeTimestamp =
-    startRecords.find((record) => isSameDay(record.timestamp, now))?.timestamp || 0
+  startTimeTimestamp = isSameDay(lastStartRecord?.timestamp, now) ? lastStartRecord.timestamp : 0
 
-  const endRecords = await originalRecordManager.getRecordsByEvents(workEndEvents).catch(() => [])
-  endTimeTimestamp = endRecords.length > 0 ? endRecords[endRecords.length - 1].timestamp : 0
+  const lastEndRecord: OriginalRecord | null = await originalRecordsDb
+    .findOneAsync({ event: { $in: workEndEvents } })
+    .sort({ timestamp: -1 })
+    .catch(() => null)
+
+  endTimeTimestamp = lastEndRecord?.timestamp || 0
 
   log.info(
     [
       'Recover work time:',
-      `start: ${startTimeTimestamp ? new Date(startTimeTimestamp).toLocaleString() : ''}`,
-      `end: ${endTimeTimestamp ? new Date(endTimeTimestamp).toLocaleString() : ''}`
+      `start: ${startTimeTimestamp ? new Date(startTimeTimestamp).toLocaleString() : '-'}`,
+      `end: ${endTimeTimestamp ? new Date(endTimeTimestamp).toLocaleString() : '-'}`
     ].join(' ')
   )
 }
 
 async function onWorkStartEventHandler(eventName: string) {
   const now = Date.now()
-  await originalRecordManager.addRecord({
+  await originalRecordsDb.insertAsync({
     event: eventName,
     timestamp: now
   })
@@ -42,32 +46,39 @@ async function onWorkStartEventHandler(eventName: string) {
     return
   }
 
-  // record work end time of last session
-  await shiftRecordManager.addRecord({
-    event: 'work-end',
-    timestamp: endTimeTimestamp
+  // record work start time of current session
+  await shiftRecordsDb.insertAsync({
+    event: ShiftRecordEvent.WorkStart,
+    timestamp: now
   })
 
-  if (Notification.isSupported()) {
-    new Notification({
-      title: 'Welcome back!',
-      body: `Last work session: ${formatTime(startTimeTimestamp)} - ${formatTime(endTimeTimestamp)}`
-    }).show()
+  if (startTimeTimestamp && endTimeTimestamp) {
+    // record work end time of last session
+    await shiftRecordsDb.insertAsync({
+      event: ShiftRecordEvent.WorkEnd,
+      timestamp: endTimeTimestamp
+    })
+
+    if (Notification.isSupported()) {
+      // to attract user's attention
+      // wait for 2 seconds to show notification after start event
+      const lastWorkSession = `${formatTime(startTimeTimestamp)} - ${formatTime(endTimeTimestamp)}`
+      setTimeout(() => {
+        new Notification({
+          title: 'Welcome back!',
+          body: `Last work session: ${lastWorkSession}`
+        }).show()
+      }, 2000)
+    }
   }
 
-  // record work start time of current session
-  startTimeTimestamp = now
-  await shiftRecordManager.addRecord({
-    event: 'work-start',
-    timestamp: startTimeTimestamp
-  })
-
   endTimeTimestamp = 0
+  startTimeTimestamp = now
 }
 
 async function onWorkEndEventHandler(eventName: string) {
   const now = Date.now()
-  await originalRecordManager.addRecord({
+  await originalRecordsDb.insertAsync({
     event: eventName,
     timestamp: now
   })
