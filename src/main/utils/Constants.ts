@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { app, screen } from 'electron'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { name, version } from '../../../package.json'
@@ -15,11 +15,36 @@ export default class Constants {
 
   static IS_MAC = process.platform === 'darwin'
 
-  static DEFAULT_WEB_PREFERENCES = {
+  static WEB_PREFERENCES = {
     nodeIntegration: false,
     contextIsolation: true,
     enableRemoteModule: false,
-    preload: join(__dirname, '../preload/index.js')
+    devTools: this.IS_DEV_ENV,
+    preload: join(__dirname, '../preload/index.js'),
+    sandbox: false
+  }
+
+  static getWindowOptions() {
+    const allDisplays = screen.getAllDisplays()
+    const primaryDisplay = screen.getPrimaryDisplay()
+    const secondaryDisplay = allDisplays.find(display =>
+      display.id !== primaryDisplay.id
+    )
+
+    // use secondary display if dev env, otherwise use primary display
+    const targetDisplay = this.IS_DEV_ENV ? secondaryDisplay || primaryDisplay : primaryDisplay
+
+    const width = this.IS_DEV_ENV ? 1500 : 1000;
+    const height = 650;
+
+    const windowOptions = {
+      x: Math.floor(targetDisplay.bounds.x + (targetDisplay.bounds.width - width) / 2),
+      y: Math.floor(targetDisplay.bounds.y + (targetDisplay.bounds.height - height) / 2),
+      width,
+      height
+    }
+
+    return windowOptions
   }
 
   static APP_INDEX_URL_DEV = 'http://localhost:5173/index.html'

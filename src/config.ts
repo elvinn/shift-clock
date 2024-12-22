@@ -1,16 +1,12 @@
 import Store from 'electron-store'
 
+// TODO: Add config options
 interface Config {
-  notionToken?: string
-  notionDatabaseId?: string
 }
 
 const config = new Store<Config>({
   name: 'config',
-  defaults: {
-    notionToken: '',
-    notionDatabaseId: ''
-  }
+  defaults: {}
 }) as Store<Config> & { get: (key: keyof Config) => Config[keyof Config] }
 
 export default config

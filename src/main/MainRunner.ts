@@ -10,14 +10,13 @@ const exitApp = (mainWindow: BrowserWindow): void => {
   app.exit()
 }
 
-export const createMainWindow = async (mainWindow: BrowserWindow): Promise<BrowserWindow> => {
-  mainWindow = new BrowserWindow({
+export const createMainWindow = async (): Promise<BrowserWindow> => {
+  const mainWindow = new BrowserWindow({
     title: Constants.APP_NAME,
     show: false,
-    width: Constants.IS_DEV_ENV ? 1500 : 1200,
-    height: 650,
     useContentSize: true,
-    webPreferences: Constants.DEFAULT_WEB_PREFERENCES
+    ...Constants.getWindowOptions(),
+    webPreferences: Constants.WEB_PREFERENCES
   })
 
   mainWindow.setMenu(null)
@@ -65,7 +64,7 @@ export const createErrorWindow = async (
     title: Constants.APP_NAME,
     show: false,
     resizable: Constants.IS_DEV_ENV,
-    webPreferences: Constants.DEFAULT_WEB_PREFERENCES
+    webPreferences: Constants.WEB_PREFERENCES
   })
 
   errorWindow.setMenu(null)

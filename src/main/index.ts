@@ -1,17 +1,15 @@
 import { app, WebContents, RenderProcessGoneDetails } from 'electron'
+import log from 'electron-log/main'
+
 
 import Constants from './utils/constants'
-import { createErrorWindow } from './MainRunner'
+import { createErrorWindow, createMainWindow } from './MainRunner'
 import { registerAutoListener } from './autoListener'
 
 let mainWindow
 let errorWindow
 
 app.on('ready', async () => {
-  if (Constants.IS_DEV_ENV) {
-    import('./index.dev')
-  }
-
   // Disable special menus on macOS by uncommenting the following, if necessary
   /*
   if (Constants.IS_MAC) {
@@ -20,6 +18,7 @@ app.on('ready', async () => {
   }
   */
 
+  mainWindow = await createMainWindow()
   registerAutoListener()
 })
 
@@ -39,6 +38,7 @@ app.on(
   }
 )
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (error) => {
+  log.error('uncaughtException', error)
   errorWindow = createErrorWindow(errorWindow, mainWindow)
 })

@@ -13,11 +13,19 @@
     "node": true,
     "es6": true
   },
-  "extends": ["standard", "prettier", "plugin:promise/recommended"],
+  "extends": [
+    "standard",
+    "prettier",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
   "globals": {
     "__static": true
   },
-  "plugins": ["promise"],
+  "plugins": [
+    "react",
+    "react-hooks"
+  ],
   "rules": {
     "arrow-parens": 0,
     "generator-star-spacing": 0,
@@ -26,6 +34,13 @@
     "no-trailing-spaces": 1,
     "no-control-regex": 0,
     "no-useless-constructor": 0,
-    "node/no-deprecated-api": 0
+    "node/no-deprecated-api": 0,
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

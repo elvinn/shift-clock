@@ -6,6 +6,7 @@ import EslintPlugin from 'vite-plugin-eslint'
 import { rmSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { builtinModules } from 'module'
+import react from '@vitejs/plugin-react'
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -13,8 +14,8 @@ export default defineConfig(({ mode }) => {
   process.env = {
     ...(isDevEnv
       ? {
-          ELECTRON_ENABLE_LOGGING: 'true'
-        }
+        ELECTRON_ENABLE_LOGGING: 'true'
+      }
       : {}),
     ...process.env,
     ...loadEnv(mode, process.cwd())
@@ -50,25 +51,13 @@ export default defineConfig(({ mode }) => {
           outDir: 'dist/preload'
         }
       }
-    }
+    },
   ]
-
-  if (isDevEnv) {
-    electronPluginConfigs.push({
-      entry: 'src/main/index.dev.ts',
-      vite: {
-        root: resolve('.'),
-        build: {
-          outDir: 'dist/main'
-        }
-      }
-    })
-  }
 
   return {
     define: {},
     resolve: {
-      extensions: ['.mjs', '.js', '.ts', '.vue', '.json', '.scss'],
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],
       alias: {
         '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src')
       }
@@ -83,9 +72,8 @@ export default defineConfig(({ mode }) => {
       outDir: resolve('./dist')
     },
     plugins: [
-      // Docs: https://github.com/gxmari007/vite-plugin-eslint
+      react(),
       EslintPlugin(),
-      // Docs: https://github.com/electron-vite/vite-plugin-electron
       ElectronPlugin(electronPluginConfigs),
       RendererPlugin()
     ]
