@@ -12,7 +12,6 @@
         "mode": "auto"
       }
     ],
-    "emmet.syntaxProfiles": {},
     "files.autoSave": "afterDelay",
     "editor.wordWrap": "on",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
