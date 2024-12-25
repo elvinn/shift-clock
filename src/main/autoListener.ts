@@ -1,7 +1,7 @@
 import { app, powerMonitor, Notification } from 'electron'
 
 import { originalRecordsDb, shiftRecordsDb, ShiftRecordEvent, OriginalRecord } from './db'
-import { isSameDay, formatTime } from './utils/time'
+import { isSameDay, formatTime, getTodayStartTimestamp } from './utils/time'
 import log from 'electron-log/main'
 
 const workStartEvents = ['app-launch', 'resume', 'unlock-screen', 'user-did-become-active'] as const
@@ -11,13 +11,16 @@ let startTimeTimestamp: number
 let endTimeTimestamp: number
 
 async function initTimeStamps() {
-  const lastStartRecord: OriginalRecord | null = await originalRecordsDb
-    .findOneAsync({ event: { $in: workStartEvents } })
-    .sort({ timestamp: -1 })
+  const todayStartRecord: OriginalRecord | null = await originalRecordsDb
+    .findOneAsync({
+      event: { $in: workStartEvents },
+      timestamp: { $gte: getTodayStartTimestamp() }
+    })
+    .sort({ timestamp: 1 })
     .catch(() => null)
 
   const now = Date.now()
-  startTimeTimestamp = isSameDay(lastStartRecord?.timestamp, now) ? lastStartRecord.timestamp : 0
+  startTimeTimestamp = isSameDay(todayStartRecord?.timestamp, now) ? todayStartRecord.timestamp : 0
 
   const lastEndRecord: OriginalRecord | null = await originalRecordsDb
     .findOneAsync({ event: { $in: workEndEvents } })
@@ -29,7 +32,7 @@ async function initTimeStamps() {
   log.info(
     [
       'Recover work time:',
-      `start: ${startTimeTimestamp ? new Date(startTimeTimestamp).toLocaleString() : '-'}`,
+      `start: ${startTimeTimestamp ? new Date(startTimeTimestamp).toLocaleString() : '-'},`,
       `end: ${endTimeTimestamp ? new Date(endTimeTimestamp).toLocaleString() : '-'}`
     ].join(' ')
   )

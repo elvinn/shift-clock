@@ -16,3 +16,8 @@ export function formatTime(timestamp: number): string {
   const date = new Date(timestamp)
   return date.toLocaleTimeString()
 }
+
+export function getTodayStartTimestamp(): number {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+}
