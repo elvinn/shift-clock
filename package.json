@@ -40,8 +40,10 @@
     "@seald-io/nedb": "^4.0.4",
     "electron-log": "^5.2.3",
     "electron-store": "^10.0.0",
+    "lucide-react": "^0.469.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "6"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.1",
@@ -64,6 +66,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "playwright": "^1.48.1",
     "prettier": "^3.3.3",
+    "sass-embedded": "^1.83.0",
     "typescript": "^5.7.2",
     "vite": "^5.4.10",
     "vite-plugin-electron": "^0.29.0",

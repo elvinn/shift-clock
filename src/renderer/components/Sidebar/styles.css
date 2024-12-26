@@ -1,0 +1,50 @@
+.sidebar {
+  position: relative;
+  width: 250px;
+  min-width: 200px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  user-select: none;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  border-radius: 5px;
+  gap: 10px;
+  -webkit-user-drag: none;
+  cursor: pointer;
+}
+
+/* 确保链接内的所有元素都继承鼠标样式 */
+.sidebar nav a * {
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+
+.sidebar nav a.active {
+  background-color: #e0e0e0;
+}
+
+.resize-handle {
+  position: absolute;
+  right: -5px;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: col-resize;
+  z-index: 1;
+}
+
+.sidebar.resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.sidebar nav a:hover {
+  background-color: #eee; /* 鼠标悬停时的背景色 */
+}
