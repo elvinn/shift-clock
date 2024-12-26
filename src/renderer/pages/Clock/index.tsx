@@ -94,10 +94,10 @@ const Clock: React.FC = () => {
   return (
     <div className="page clock-page">
       {data.map((item) => (
-        <>
-          <Record key={item.startTimestamp} {...item} />
+        <React.Fragment key={item.startTimestamp}>
+          <Record {...item} />
           <div className="divider"></div>
-        </>
+        </React.Fragment>
       ))}
     </div>
   )

@@ -21,7 +21,7 @@ export default class Constants {
     enableRemoteModule: false,
     devTools: this.IS_DEV_ENV,
     preload: join(__dirname, '../preload/index.js'),
-    sandbox: false
+    sandbox: true
   }
 
   static getWindowOptions() {

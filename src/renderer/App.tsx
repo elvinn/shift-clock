@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import Clock from './pages/Clock'
 import Graph from './pages/Graph'
@@ -13,7 +13,9 @@ const App: React.FC = () => {
         <Sidebar />
         <main className="content">
           <Routes>
-            <Route path="/" element={<Clock />} />
+            <Route path="/" element={<Navigate to="/clock" replace />} />
+            <Route path="/index.html" element={<Navigate to="/clock" replace />} />
+            <Route path="/clock" element={<Clock />} />
             <Route path="/graph" element={<Graph />} />
             <Route path="/setting" element={<Setting />} />
           </Routes>
