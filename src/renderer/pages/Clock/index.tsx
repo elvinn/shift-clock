@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './styles.scss'
 import arrow from '../../assets/arrow.png'
 
-interface RecordProps {
+import { useWorkRecords } from '../../hooks/'
+
+interface WorkSession {
   startTimestamp: number
-  endTimestamp: number
+  endTimestamp?: number
 }
 
-const Record: React.FC<RecordProps> = ({ startTimestamp, endTimestamp }) => {
+const Record: React.FC<WorkSession> = ({ startTimestamp, endTimestamp }) => {
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp)
     return date.toLocaleTimeString('en-US', {
@@ -68,37 +70,72 @@ const Record: React.FC<RecordProps> = ({ startTimestamp, endTimestamp }) => {
       <div className="time-entry">
         <span>{formatTime(startTimestamp)}</span>
         <img className="arrow" src={arrow} alt="arrow" />
-        <span>{formatTime(endTimestamp)}</span>
+        <span>{endTimestamp ? formatTime(endTimestamp) : '...'}</span>
       </div>
     </div>
   )
 }
 
-const mockData = [
-  {
-    startTimestamp: new Date('2024-12-25T09:30:00').getTime(),
-    endTimestamp: new Date('2024-12-25T21:00:00').getTime()
-  },
-  {
-    startTimestamp: new Date('2024-12-24T09:30:00').getTime(),
-    endTimestamp: new Date('2024-12-24T21:00:00').getTime()
-  },
-  {
-    startTimestamp: new Date('2024-12-23T09:30:00').getTime(),
-    endTimestamp: new Date('2024-12-23T21:00:00').getTime()
-  }
-]
-
 const Clock: React.FC = () => {
-  const [data] = useState(mockData)
+  const [currentEndDate, setCurrentEndDate] = useState(Date.now())
+  const daysPerPage = 30
+  const startDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
+  const containerRef = useRef<globalThis.HTMLDivElement>(null)
+
+  const { data, loading, error } = useWorkRecords(startDate, currentEndDate)
+  const [allData, setAllData] = useState<WorkSession[]>([])
+
+  // 自动加载更多数据的逻辑
+  useEffect(() => {
+    if (!loading && data.hasEarlierRecords && data.records.length < 10) {
+      const newEndDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
+      setCurrentEndDate(newEndDate)
+    }
+  }, [data.records, data.hasEarlierRecords, loading, currentEndDate])
+
+  useEffect(() => {
+    setAllData((prevData) => {
+      const existingTimestamps = new Set(prevData.map((item) => item.startTimestamp))
+
+      const newRecords = data.records.filter(
+        (record) => !existingTimestamps.has(record.startTimestamp)
+      )
+
+      return [...prevData, ...newRecords]
+    })
+  }, [data.records])
+
+  const handleScroll = useCallback(() => {
+    if (!containerRef.current || loading || !data.hasEarlierRecords) return
+
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current
+    if (scrollHeight - scrollTop <= clientHeight * 1.5) {
+      const newEndDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
+      setCurrentEndDate(newEndDate)
+    }
+  }, [loading, data.hasEarlierRecords, currentEndDate])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (container) {
+      container.addEventListener('scroll', handleScroll)
+      return () => container.removeEventListener('scroll', handleScroll)
+    }
+  }, [handleScroll])
+
+  if (error) {
+    return <div className="error">Error: {error.message}</div>
+  }
+
   return (
-    <div className="page clock-page">
-      {data.map((item) => (
-        <React.Fragment key={item.startTimestamp}>
+    <div className="page clock-page" ref={containerRef}>
+      {allData.map((item, index) => (
+        <React.Fragment key={`${item.startTimestamp}-${index}`}>
           <Record {...item} />
-          <div className="divider"></div>
+          <div className="divider" />
         </React.Fragment>
       ))}
+      {loading && <div className="loading">Loading...</div>}
     </div>
   )
 }

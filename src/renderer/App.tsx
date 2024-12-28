@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar'
 import Clock from './pages/Clock'
 import Graph from './pages/Graph'
 import Setting from './pages/Setting'
-import './App.css'
+import './App.scss'
 
 const App: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, RenderProcessGoneDetails } from 'electron'
 import Constants from './utils/constants'
-import IPCs from './IPCs'
+import IPCs from './ipcs/index'
 
 const exitApp = (mainWindow: BrowserWindow): void => {
   if (mainWindow && !mainWindow.isDestroyed()) {

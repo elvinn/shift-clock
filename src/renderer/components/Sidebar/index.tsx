@@ -38,7 +38,7 @@ const Sidebar: React.FC = () => {
     <div className="sidebar" style={{ width }}>
       <h1>Shift Clock</h1>
       <nav>
-        <NavLink to="/" className={getLinkClass}>
+        <NavLink to="/clock" className={getLinkClass}>
           <Clock />
           Clock
         </NavLink>

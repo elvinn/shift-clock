@@ -1,21 +1,8 @@
-import { ipcMain, shell, IpcMainEvent, dialog } from 'electron'
-import Constants from './utils/constants'
+import { ipcMain, dialog, IpcMainEvent } from 'electron'
+import { IIPCHandler } from './base'
 
-/*
- * IPC Communications
- * */
-export default class IPCs {
-  static initialize(): void {
-    // Get application version
-    ipcMain.handle('msgRequestGetVersion', () => {
-      return Constants.APP_VERSION
-    })
-
-    // Open url via web browser
-    ipcMain.on('msgOpenExternalLink', async (event: IpcMainEvent, url: string) => {
-      await shell.openExternal(url)
-    })
-
+export class FileIPCHandler implements IIPCHandler {
+  initialize(): void {
     // Open file
     ipcMain.handle('msgOpenFile', async (event: IpcMainEvent, filter: string) => {
       const filters = []
