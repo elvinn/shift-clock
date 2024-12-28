@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@seald-io/nedb": "^4.0.4",
+    "antd": "^5.22.7",
     "electron-log": "^5.2.3",
     "electron-store": "^10.0.0",
     "lucide-react": "^0.469.0",

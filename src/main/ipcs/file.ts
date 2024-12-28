@@ -4,7 +4,7 @@ import { IIPCHandler } from './base'
 export class FileIPCHandler implements IIPCHandler {
   initialize(): void {
     // Open file
-    ipcMain.handle('msgOpenFile', async (event: IpcMainEvent, filter: string) => {
+    ipcMain.handle('openFile', async (event: IpcMainEvent, filter: string) => {
       const filters = []
       if (filter === 'text') {
         filters.push({ name: 'Text', extensions: ['txt', 'json'] })

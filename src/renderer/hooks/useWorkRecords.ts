@@ -37,7 +37,7 @@ export const useWorkRecords = (
         setLoading(true)
         setError(null)
 
-        const response = await window.electronAPI.invoke('msgGetWorkRecords', {
+        const response = await window.electronAPI.invoke('getWorkRecords', {
           startDate,
           endDate
         })

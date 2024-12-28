@@ -4,13 +4,12 @@ import { IIPCHandler } from './base'
 
 export class AppIPCHandler implements IIPCHandler {
   initialize(): void {
-    // Get application version
-    ipcMain.handle('msgRequestGetVersion', () => {
+    // Update channel names
+    ipcMain.handle('requestGetVersion', () => {
       return Constants.APP_VERSION
     })
 
-    // Open url via web browser
-    ipcMain.on('msgOpenExternalLink', async (event, url: string) => {
+    ipcMain.on('openExternalLink', async (event, url: string) => {
       await shell.openExternal(url)
     })
   }

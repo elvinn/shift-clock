@@ -1,3 +1,32 @@
 .setting-page {
-  margin: 0 auto;
+  margin-top: 12px;
+  max-width: 800px;
+  .setting-block {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .setting-title {
+    font-size: 24px;
+  }
+
+  .setting-item {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    .setting-label {
+      font-size: 20px;
+      color: #333;
+    }
+
+    .ant-switch.ant-switch-checked {
+      background: #000;
+    }
+
+    .ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled) {
+      background: #333;
+    }
+  }
 }

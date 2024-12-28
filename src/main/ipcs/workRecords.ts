@@ -22,7 +22,7 @@ export class WorkRecordsIPCHandler implements IIPCHandler {
   initialize(): void {
     // Get work records
     ipcMain.handle(
-      'msgGetWorkRecords',
+      'getWorkRecords',
       async (event: IpcMainEvent, { startDate, endDate }: { startDate: number; endDate: number }) => {
         const firstStart = await this.getFirstStart()
         // Find work records within date range
