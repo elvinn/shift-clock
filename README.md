@@ -13,3 +13,19 @@
 - [ ] 更新 App 图标
 - [x] 使用轻量级数据库替代 JSONL 文件'
 - [ ] 实现前端展示页面
+
+## Database
+
+### Original Record
+
+| Field     | Type   | Description                                                    |
+| --------- | ------ | -------------------------------------------------------------- |
+| event     | string | Event type (e.g. 'lock-screen', 'unlock-screen', 'app-launch') |
+| timestamp | number | Unix timestamp in milliseconds                                 |
+
+### Shift Record
+
+| Field          | Type   | Description                    |
+| -------------- | ------ | ------------------------------ |
+| startTimestamp | number | Unix timestamp in milliseconds |
+| endTimestamp   | number | Unix timestamp in milliseconds |

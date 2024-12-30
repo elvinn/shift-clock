@@ -1,8 +1,8 @@
 import { ipcMain, IpcMainEvent } from 'electron'
-import { shiftRecordsDb, ShiftRecord, ShiftRecordEvent } from '../db'
-import { IIPCHandler } from './base'
+import { shiftRecordsDb } from '../db'
+import { IPCHandler } from './base'
 
-export class WorkRecordsIPCHandler implements IIPCHandler {
+export class WorkRecordsIPCHandler implements IPCHandler {
   private firstStart: number | null = null
 
   private async getFirstStart(): Promise<number | null> {
@@ -10,11 +10,11 @@ export class WorkRecordsIPCHandler implements IIPCHandler {
       return this.firstStart
     }
     const record = await shiftRecordsDb
-      .findAsync({ event: ShiftRecordEvent.WorkStart })
-      .sort({ timestamp: 1 })
+      .findAsync({})
+      .sort({ startTimestamp: 1 })
       .limit(1)
 
-    this.firstStart = record[0]?.timestamp || null
+    this.firstStart = record[0]?.startTimestamp || null
 
     return this.firstStart
   }
@@ -24,56 +24,18 @@ export class WorkRecordsIPCHandler implements IIPCHandler {
     ipcMain.handle(
       'getWorkRecords',
       async (event: IpcMainEvent, { startDate, endDate }: { startDate: number; endDate: number }) => {
-        const firstStart = await this.getFirstStart()
-        // Find work records within date range
-        const records = await shiftRecordsDb
-          .findAsync({
-            timestamp: { $lte: endDate, $gte: startDate }
-          })
-          .sort({ timestamp: -1 })
 
-        // Group records by day and process each day's records
-        const workSessions: { startTimestamp: number; endTimestamp?: number }[] = []
-
-        // Group records by day
-        const recordsByDay = new Map<string, ShiftRecord[]>()
-        for (const record of records) {
-          const date = new Date(record.timestamp)
-          const dayKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-          if (!recordsByDay.has(dayKey)) {
-            recordsByDay.set(dayKey, [])
-          }
-          recordsByDay.get(dayKey)!.push(record)
-        }
-
-        // Process each day's records
-        for (const dayRecords of recordsByDay.values()) {
-          let firstStart: number | null = null
-          let lastEnd: number | null = null
-
-          // Find earliest start and latest end
-          for (const record of dayRecords) {
-            if (record.event === ShiftRecordEvent.WorkStart) {
-              if (firstStart === null || record.timestamp < firstStart) {
-                firstStart = record.timestamp
-              }
-            } else if (record.event === ShiftRecordEvent.WorkEnd) {
-              if (lastEnd === null || record.timestamp > lastEnd) {
-                lastEnd = record.timestamp
-              }
-            }
-          }
-
-          // Add session if we have a start time
-          if (firstStart !== null) {
-            workSessions.push({
-              startTimestamp: firstStart,
-              endTimestamp: lastEnd || null
+        const [firstStart, records] = await Promise.all([
+          this.getFirstStart(),
+          // Find work records within date range
+          shiftRecordsDb
+            .findAsync({
+              startTimestamp: { $lte: endDate, $gte: startDate }
             })
-          }
-        }
+            .sort({ startTimestamp: -1 })
+        ])
 
-        if (workSessions.length === 0) {
+        if (records.length === 0) {
           return {
             records: [],
             hasEarlierRecords: firstStart !== null && firstStart < startDate
@@ -81,10 +43,10 @@ export class WorkRecordsIPCHandler implements IIPCHandler {
         }
 
         // Find earliest timestamp in current records
-        const earliestTimestamp = Math.min(...records.map(r => r.timestamp))
+        const earliestTimestamp = Math.min(...records.map(r => r.startTimestamp))
 
         return {
-          records: workSessions,
+          records,
           hasEarlierRecords: firstStart !== null && earliestTimestamp > firstStart
         }
       }

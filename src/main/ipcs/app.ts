@@ -1,8 +1,8 @@
 import { ipcMain, shell } from 'electron'
 import Constants from '../utils/constants'
-import { IIPCHandler } from './base'
+import { IPCHandler } from './base'
 
-export class AppIPCHandler implements IIPCHandler {
+export class AppIPCHandler implements IPCHandler {
   initialize(): void {
     // Update channel names
     ipcMain.handle('requestGetVersion', () => {

@@ -1,6 +1,6 @@
 import { IpcMainEvent } from 'electron'
 
-export interface IIPCHandler {
+export interface IPCHandler {
   initialize(): void
 }
 

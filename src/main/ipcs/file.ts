@@ -1,7 +1,7 @@
 import { ipcMain, dialog, IpcMainEvent } from 'electron'
-import { IIPCHandler } from './base'
+import { IPCHandler } from './base'
 
-export class FileIPCHandler implements IIPCHandler {
+export class FileIPCHandler implements IPCHandler {
   initialize(): void {
     // Open file
     ipcMain.handle('openFile', async (event: IpcMainEvent, filter: string) => {

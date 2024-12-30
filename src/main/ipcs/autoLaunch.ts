@@ -1,8 +1,8 @@
 import { ipcMain, app, IpcMainEvent } from 'electron'
-import { IIPCHandler } from './base'
+import { IPCHandler } from './base'
 
 
-export class AutoLaunchIPCHandler implements IIPCHandler {
+export class AutoLaunchIPCHandler implements IPCHandler {
   initialize(): void {
     ipcMain.handle('setAutoLaunch', async (event: IpcMainEvent, enable: boolean) => {
       if (enable) {
