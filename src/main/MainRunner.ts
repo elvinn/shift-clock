@@ -15,6 +15,7 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     title: Constants.APP_NAME,
     show: false,
     useContentSize: true,
+    titleBarStyle: 'hidden',
     ...Constants.getWindowOptions(),
     webPreferences: Constants.WEB_PREFERENCES
   })
