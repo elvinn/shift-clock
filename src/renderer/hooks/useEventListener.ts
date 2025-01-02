@@ -15,16 +15,19 @@ export const useEventListener = <K extends keyof globalThis.WindowEventMap>(
     element = window,
     enabled = true
   }: {
-    element?: globalThis.HTMLElement | globalThis.Window | null;
+    element?: globalThis.HTMLElement | globalThis.Window | null
     enabled?: boolean
   } = {}
 ) => {
   const fnRef = useRef(handler)
   fnRef.current = handler
 
-  const savedHandler = useCallback((event: globalThis.WindowEventMap[K]) => {
-    fnRef.current(event)
-  }, [fnRef])
+  const savedHandler = useCallback(
+    (event: globalThis.WindowEventMap[K]) => {
+      fnRef.current(event)
+    },
+    [fnRef]
+  )
 
   useEffect(() => {
     if (!enabled || !element) {

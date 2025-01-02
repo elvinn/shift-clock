@@ -9,10 +9,7 @@ export class WorkRecordsIPCHandler implements IPCHandler {
     if (this.firstStart) {
       return this.firstStart
     }
-    const record = await shiftRecordsDb
-      .findAsync({})
-      .sort({ startTimestamp: 1 })
-      .limit(1)
+    const record = await shiftRecordsDb.findAsync({}).sort({ startTimestamp: 1 }).limit(1)
 
     this.firstStart = record[0]?.startTimestamp || null
 
@@ -23,8 +20,10 @@ export class WorkRecordsIPCHandler implements IPCHandler {
     // Get work records
     ipcMain.handle(
       'getWorkRecords',
-      async (event: IpcMainEvent, { startDate, endDate }: { startDate: number; endDate: number }) => {
-
+      async (
+        event: IpcMainEvent,
+        { startDate, endDate }: { startDate: number; endDate: number }
+      ) => {
         const [firstStart, records] = await Promise.all([
           this.getFirstStart(),
           // Find work records within date range
@@ -43,7 +42,7 @@ export class WorkRecordsIPCHandler implements IPCHandler {
         }
 
         // Find earliest timestamp in current records
-        const earliestTimestamp = Math.min(...records.map(r => r.startTimestamp))
+        const earliestTimestamp = Math.min(...records.map((r) => r.startTimestamp))
 
         return {
           records,

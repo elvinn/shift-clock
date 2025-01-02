@@ -12,6 +12,6 @@ export default class IPCs {
   ]
 
   static initialize(): void {
-    this.handlers.forEach(handler => handler.initialize())
+    this.handlers.forEach((handler) => handler.initialize())
   }
 }

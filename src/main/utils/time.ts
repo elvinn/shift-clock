@@ -1,3 +1,7 @@
+export function isToday(timestamp: number): boolean {
+  return isSameDay(timestamp, Date.now())
+}
+
 export function isSameDay(timestamp1: number, timestamp2: number): boolean {
   if (!timestamp1 || !timestamp2) {
     return false

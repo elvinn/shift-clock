@@ -1,8 +1,7 @@
 import Store from 'electron-store'
 
 // TODO: Add config options
-interface Config {
-}
+interface Config {}
 
 const config = new Store<Config>({
   name: 'config',

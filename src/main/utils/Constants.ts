@@ -24,18 +24,25 @@ export default class Constants {
     sandbox: true
   }
 
+  static WORK_START_EVENTS = [
+    'app-launch',
+    'resume',
+    'unlock-screen',
+    'user-did-become-active'
+  ] as const
+
+  static WORK_END_EVENTS = ['app-exit', 'suspend', 'lock-screen', 'user-did-resign-active'] as const
+
   static getWindowOptions() {
     const allDisplays = screen.getAllDisplays()
     const primaryDisplay = screen.getPrimaryDisplay()
-    const secondaryDisplay = allDisplays.find(display =>
-      display.id !== primaryDisplay.id
-    )
+    const secondaryDisplay = allDisplays.find((display) => display.id !== primaryDisplay.id)
 
     // use secondary display if dev env, otherwise use primary display
     const targetDisplay = this.IS_DEV_ENV ? secondaryDisplay || primaryDisplay : primaryDisplay
 
-    const width = this.IS_DEV_ENV ? 1500 : 1000;
-    const height = 650;
+    const width = this.IS_DEV_ENV ? 1500 : 1000
+    const height = 650
 
     const windowOptions = {
       x: Math.floor(targetDisplay.bounds.x + (targetDisplay.bounds.width - width) / 2),

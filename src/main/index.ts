@@ -1,10 +1,10 @@
 import { app, WebContents, RenderProcessGoneDetails } from 'electron'
 import log from 'electron-log/main'
 
-
 import Constants from './utils/constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 import { registerAutoListener } from './autoListener'
+import { saveEndRecord } from './db'
 
 let mainWindow
 let errorWindow
@@ -18,15 +18,16 @@ app.on('ready', async () => {
   }
   */
 
+  await registerAutoListener()
   mainWindow = await createMainWindow()
-  registerAutoListener()
 })
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
   mainWindow = null
   errorWindow = null
 
   if (!Constants.IS_MAC) {
+    await saveEndRecord('app-exit')
     app.quit()
   }
 })

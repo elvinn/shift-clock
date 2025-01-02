@@ -14,8 +14,8 @@ export default defineConfig(({ mode }) => {
   process.env = {
     ...(isDevEnv
       ? {
-        ELECTRON_ENABLE_LOGGING: 'true'
-      }
+          ELECTRON_ENABLE_LOGGING: 'true'
+        }
       : {}),
     ...process.env,
     ...loadEnv(mode, process.cwd())
@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
           outDir: 'dist/preload'
         }
       }
-    },
+    }
   ]
 
   return {
@@ -71,11 +71,6 @@ export default defineConfig(({ mode }) => {
       minify: !isDevEnv,
       outDir: resolve('./dist')
     },
-    plugins: [
-      react(),
-      EslintPlugin(),
-      ElectronPlugin(electronPluginConfigs),
-      RendererPlugin()
-    ]
+    plugins: [react(), EslintPlugin(), ElectronPlugin(electronPluginConfigs), RendererPlugin()]
   }
 })

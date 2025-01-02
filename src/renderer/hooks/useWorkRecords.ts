@@ -20,10 +20,7 @@ interface UseWorkRecordsResult {
  * @param endDate - The end date to fetch records to.
  * @returns The work records and loading state.
  */
-export const useWorkRecords = (
-  startDate: number,
-  endDate: number
-): UseWorkRecordsResult => {
+export const useWorkRecords = (startDate: number, endDate: number): UseWorkRecordsResult => {
   const [data, setData] = useState<UseWorkRecordsResult['data']>({
     records: [],
     hasEarlierRecords: false
