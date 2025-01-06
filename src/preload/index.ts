@@ -9,7 +9,9 @@ const mainAvailChannels: string[] = [
   'setAutoLaunch',
   'getAutoLaunchStatus'
 ]
-const rendererAvailChannels: string[] = []
+const rendererAvailChannels: string[] = [
+  'triggerStartEvent'
+]
 
 contextBridge.exposeInMainWorld('electronAPI', {
   send: (channel: string, ...data: any[]): void => {

@@ -1,4 +1,4 @@
-import { app, WebContents, RenderProcessGoneDetails } from 'electron'
+import { app, powerMonitor, WebContents, RenderProcessGoneDetails } from 'electron'
 import log from 'electron-log/main'
 
 import Constants from './utils/constants'
@@ -20,10 +20,18 @@ app.on('ready', async () => {
 
   await registerAutoListener()
   mainWindow = await createMainWindow()
+
+  Constants.WORK_START_EVENTS.forEach((event) => {
+    powerMonitor.on(event as any, () => {
+      mainWindow.webContents.send('triggerStartEvent', {
+        timestamp: Date.now(),
+        event,
+      })
+    })
+  })
 })
 
 app.on('window-all-closed', async () => {
-  mainWindow = null
   errorWindow = null
 
   if (!Constants.IS_MAC) {

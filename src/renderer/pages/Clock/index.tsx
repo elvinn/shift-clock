@@ -77,21 +77,22 @@ const Record: React.FC<WorkSession> = ({ startTimestamp, endTimestamp }) => {
 }
 
 const Clock: React.FC = () => {
-  const [currentEndDate, setCurrentEndDate] = useState(Date.now())
+  const [endDate, setEndDate] = useState(Date.now())
+
   const daysPerPage = 30
-  const startDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
+  const startDate = endDate - daysPerPage * 24 * 60 * 60 * 1000
   const containerRef = useRef<globalThis.HTMLDivElement>(null)
 
-  const { data, loading, error } = useWorkRecords(startDate, currentEndDate)
+  const { data, loading, error } = useWorkRecords(startDate, endDate)
   const [allData, setAllData] = useState<WorkSession[]>([])
 
   // 自动加载更多数据的逻辑
   useEffect(() => {
     if (!loading && data.hasEarlierRecords && data.records.length < 10) {
-      const newEndDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
-      setCurrentEndDate(newEndDate)
+      const newEndDate = endDate - daysPerPage * 24 * 60 * 60 * 1000
+      setEndDate(newEndDate)
     }
-  }, [data.records, data.hasEarlierRecords, loading, currentEndDate])
+  }, [data.records, data.hasEarlierRecords, loading, endDate])
 
   useEffect(() => {
     setAllData((prevData) => {
@@ -101,7 +102,7 @@ const Clock: React.FC = () => {
         (record) => !existingTimestamps.has(record.startTimestamp)
       )
 
-      return [...prevData, ...newRecords]
+      return [...prevData, ...newRecords].sort((a, b) => b.startTimestamp - a.startTimestamp)
     })
   }, [data.records])
 
@@ -110,10 +111,10 @@ const Clock: React.FC = () => {
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current
     if (scrollHeight - scrollTop <= clientHeight * 1.5) {
-      const newEndDate = currentEndDate - daysPerPage * 24 * 60 * 60 * 1000
-      setCurrentEndDate(newEndDate)
+      const newEndDate = endDate - daysPerPage * 24 * 60 * 60 * 1000
+      setEndDate(newEndDate)
     }
-  }, [loading, data.hasEarlierRecords, currentEndDate])
+  }, [loading, data.hasEarlierRecords, endDate])
 
   useEffect(() => {
     const container = containerRef.current
@@ -122,6 +123,28 @@ const Clock: React.FC = () => {
       return () => container.removeEventListener('scroll', handleScroll)
     }
   }, [handleScroll])
+
+  const handleStartEvent = useCallback((_: any, data: any) => {
+    const eventDate = new Date(Date.now())
+    const currentEndDate = new Date(endDate)
+    if (
+      eventDate.getFullYear() === currentEndDate.getFullYear() &&
+      eventDate.getMonth() === currentEndDate.getMonth() &&
+      eventDate.getDate() === currentEndDate.getDate()
+    ) {
+      return
+    }
+
+    setEndDate(Date.now())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    window.electronAPI.on('triggerStartEvent', handleStartEvent)
+    return () => {
+      window.electronAPI.off('triggerStartEvent', handleStartEvent)
+    }
+  }, [handleStartEvent])
 
   if (error) {
     return <div className="error">Error: {error.message}</div>
