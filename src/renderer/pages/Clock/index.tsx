@@ -84,7 +84,7 @@ const Clock: React.FC = () => {
   const containerRef = useRef<globalThis.HTMLDivElement>(null)
 
   const { data, loading, error } = useWorkRecords(startDate, endDate)
-  const [allData, setAllData] = useState<WorkSession[]>([])
+  const [records, setRecords] = useState<WorkSession[]>([])
 
   // 自动加载更多数据的逻辑
   useEffect(() => {
@@ -95,14 +95,31 @@ const Clock: React.FC = () => {
   }, [data.records, data.hasEarlierRecords, loading, endDate])
 
   useEffect(() => {
-    setAllData((prevData) => {
-      const existingTimestamps = new Set(prevData.map((item) => item.startTimestamp))
-
-      const newRecords = data.records.filter(
-        (record) => !existingTimestamps.has(record.startTimestamp)
+    setRecords((preRecords) => {
+      // Create a map of existing records for easy lookup and update
+      const existingRecordsMap = new Map(
+        preRecords.map((record) => [record.startTimestamp, record])
       )
 
-      return [...prevData, ...newRecords].sort((a, b) => b.startTimestamp - a.startTimestamp)
+      // Process new records
+      data.records.forEach((newRecord) => {
+        if (existingRecordsMap.has(newRecord.startTimestamp)) {
+          // Update endTimestamp of existing record if needed
+          const existingRecord = existingRecordsMap.get(newRecord.startTimestamp)!
+          existingRecordsMap.set(newRecord.startTimestamp, {
+            ...existingRecord,
+            endTimestamp: newRecord.endTimestamp
+          })
+        } else {
+          // Add new record
+          existingRecordsMap.set(newRecord.startTimestamp, newRecord)
+        }
+      })
+
+      // Convert map back to array and sort
+      return Array.from(existingRecordsMap.values()).sort(
+        (a, b) => b.startTimestamp - a.startTimestamp
+      )
     })
   }, [data.records])
 
@@ -152,7 +169,7 @@ const Clock: React.FC = () => {
 
   return (
     <div className="page clock-page" ref={containerRef}>
-      {allData.map((item, index) => (
+      {records.map((item, index) => (
         <React.Fragment key={`${item.startTimestamp}-${index}`}>
           <Record {...item} />
           <div className="divider" />
