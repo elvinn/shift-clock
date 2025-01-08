@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Clock, ChartLine, Settings } from 'lucide-react'
 
 import { useEventListener } from '../../hooks'
-import './styles.scss'
+import './styles.css'
 
 const MIN_WIDTH = 240
 

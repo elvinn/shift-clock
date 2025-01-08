@@ -1,10 +1,11 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+
 import Sidebar from './components/Sidebar'
 import Clock from './pages/Clock'
 import Graph from './pages/Graph'
 import Setting from './pages/Setting'
-import './App.scss'
+import './App.css'
 
 const App: React.FC = () => {
   return (

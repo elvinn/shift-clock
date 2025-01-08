@@ -48,10 +48,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   invoke: async (channel: string, ...data: any[]): Promise<any> => {
     if (mainAvailChannels.includes(channel)) {
       const result = await ipcRenderer.invoke.apply(null, [channel, ...data])
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`invoke ${channel}, ${JSON.stringify(data)}`)
-        console.log(JSON.stringify({ type: 'invoke', channel, request: data, result }))
-      }
       return result
     }
 

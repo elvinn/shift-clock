@@ -14,8 +14,8 @@ export default defineConfig(({ mode }) => {
   process.env = {
     ...(isDevEnv
       ? {
-          ELECTRON_ENABLE_LOGGING: 'true'
-        }
+        ELECTRON_ENABLE_LOGGING: 'true'
+      }
       : {}),
     ...process.env,
     ...loadEnv(mode, process.cwd())
@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
   return {
     define: {},
     resolve: {
-      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.css'],
       alias: {
         '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src')
       }

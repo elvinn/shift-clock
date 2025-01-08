@@ -18,15 +18,6 @@
 
     .setting-label {
       font-size: 20px;
-      color: #333;
-    }
-
-    .ant-switch.ant-switch-checked {
-      background: #000;
-    }
-
-    .ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled) {
-      background: #333;
     }
   }
 }

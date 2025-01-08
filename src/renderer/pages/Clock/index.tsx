@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import './styles.scss'
+import './styles.css'
 import arrow from '../../assets/arrow.png'
 
 import { useWorkRecords } from '../../hooks/'

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './styles.scss'
+import './styles.css'
 import { Switch } from 'antd'
 
 const Setting: React.FC = () => {
