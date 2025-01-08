@@ -1,12 +1,13 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { ChartData } from '../types'
+import { CustomTooltipProps } from './CustomTooltip'
 
 interface WorkTimeChartProps {
   data: ChartData[]
   yAxisDomain: [number, number]
   formatYAxis: (value: number) => string
-  CustomTooltip: React.FC<any>
+  CustomTooltip: React.FC<CustomTooltipProps>
 }
 
 export const WorkTimeChart: React.FC<WorkTimeChartProps> = ({
@@ -32,11 +33,9 @@ export const WorkTimeChart: React.FC<WorkTimeChartProps> = ({
         reversed={true}
       />
       <Tooltip
-        content={
-          <div className="bg-white/90 border border-gray-300 p-2.5 rounded">
-            <CustomTooltip />
-          </div>
-        }
+        content={({ active, payload, label }) => (
+          <CustomTooltip active={active} payload={payload} label={label} />
+        )}
       />
       <Legend />
       <Line

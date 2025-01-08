@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface CustomTooltipProps {
+export interface CustomTooltipProps {
   active?: boolean
   payload?: any[]
   label?: string
