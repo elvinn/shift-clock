@@ -9,13 +9,17 @@ interface WorkTimeChartProps {
   yAxisDomain: [number, number]
   formatYAxis: (value: number) => string
   CustomTooltip: React.FC<CustomTooltipProps>
+  width: number
+  height?: number
 }
 
 export const WorkTimeChart: React.FC<WorkTimeChartProps> = ({
   data,
   yAxisDomain,
   formatYAxis,
-  CustomTooltip
+  CustomTooltip,
+  width,
+  height = 500
 }) => {
   const calculateTicks = () => {
     const [min, max] = yAxisDomain
@@ -45,8 +49,8 @@ export const WorkTimeChart: React.FC<WorkTimeChartProps> = ({
 
   return (
     <LineChart
-      width={800}
-      height={500}
+      width={width}
+      height={height}
       data={data}
       margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
     >

@@ -50,7 +50,7 @@ export const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
                 {format(dateRange[0], 'PP')} - {format(dateRange[1], 'PP')}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0" align="start" alignOffset={-300} side="bottom">
               <Calendar
                 mode="range"
                 selected={{

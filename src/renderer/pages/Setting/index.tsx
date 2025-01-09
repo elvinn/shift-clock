@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import './styles.css'
 import { Switch } from '@/renderer/components/ui/switch'
 
 const Setting: React.FC = () => {
@@ -18,13 +17,11 @@ const Setting: React.FC = () => {
   }
 
   return (
-    <div className="page setting-page">
-      <div className="setting-block">
-        <h2 className="setting-title">Auto Launch</h2>
-        <div className="setting-item">
-          <span className="setting-label">Launch on startup</span>
-          <Switch checked={autoLaunch} onCheckedChange={handleAutoLaunchChange} />
-        </div>
+    <div className="border-b border-[#ddd]">
+      <h2 className="text-2xl">Auto Launch</h2>
+      <div className="mt-2 mb-4 flex items-center justify-between">
+        <span className="text-xl">Launch on startup</span>
+        <Switch checked={autoLaunch} onCheckedChange={handleAutoLaunchChange} />
       </div>
     </div>
   )

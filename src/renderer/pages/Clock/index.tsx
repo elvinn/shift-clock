@@ -171,7 +171,7 @@ const Clock: React.FC = () => {
   }
 
   return (
-    <div className="page flex flex-col items-start gap-10" ref={containerRef}>
+    <div className="flex flex-col items-start gap-10 w-full" ref={containerRef}>
       {records.map((item, index) => (
         <React.Fragment key={`${item.startTimestamp}-${index}`}>
           <Record {...item} />

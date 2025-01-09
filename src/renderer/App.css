@@ -64,13 +64,3 @@
   font-family: 'Klee One';
   src: url('./assets/KleeOne-Regular.ttf') format('truetype');
 }
-
-@layer components {
-  .app-container {
-    @apply flex h-screen;
-  }
-
-  .content {
-    @apply flex-1 px-12 py-5 h-full overflow-y-auto;
-  }
-}

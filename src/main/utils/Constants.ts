@@ -41,8 +41,8 @@ export default class Constants {
     // use secondary display if dev env, otherwise use primary display
     const targetDisplay = this.IS_DEV_ENV ? secondaryDisplay || primaryDisplay : primaryDisplay
 
-    const width = this.IS_DEV_ENV ? 1500 : 1000
-    const height = 650
+    const width = this.IS_DEV_ENV ? 1500 : 1200
+    const height = 700
 
     const windowOptions = {
       x: Math.floor(targetDisplay.bounds.x + (targetDisplay.bounds.width - width) / 2),

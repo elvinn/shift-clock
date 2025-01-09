@@ -36,12 +36,12 @@ const Sidebar: React.FC = () => {
       className="relative w-[250px] min-w-[200px] bg-[#f5f5f5] p-5 border-r border-[#ddd] select-none"
       style={{ width }}
     >
-      <h1 className="mb-8 text-4xl">Shift Clock</h1>
+      <h1 className="my-6 text-4xl">Shift Clock</h1>
       <nav className="flex flex-col gap-2.5 text-xl">
         <NavLink
           to="/clock"
           className={({ isActive }) =>
-            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none] 
+            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none]
              ${isActive ? 'bg-[#e0e0e0]' : 'hover:bg-[#eaeaea]'}`
           }
         >
@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
         <NavLink
           to="/graph"
           className={({ isActive }) =>
-            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none] 
+            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none]
              ${isActive ? 'bg-[#e0e0e0]' : 'hover:bg-[#eaeaea]'}`
           }
         >
@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
         <NavLink
           to="/setting"
           className={({ isActive }) =>
-            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none] 
+            `flex items-center p-2.5 font-bold text-[#333] rounded-md gap-2.5 [-webkit-user-drag:none]
              ${isActive ? 'bg-[#e0e0e0]' : 'hover:bg-[#eaeaea]'}`
           }
         >

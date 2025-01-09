@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useWorkRecords } from '@/renderer/hooks'
 import { TimeRangeSelector } from './components/TimeRangeSelector'
 import { DurationFilter } from './components/DurationFilter'
@@ -8,6 +8,31 @@ import { useChartData } from './hooks/useChartData'
 import { useTimeRange } from './hooks/useTimeRange'
 
 const Graph: React.FC = () => {
+  const containerRef = useRef<globalThis.HTMLDivElement>(null)
+  const [chartWidth, setChartWidth] = useState(0)
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.clientWidth
+        setChartWidth(Math.min(800, Math.max(containerWidth, 600)))
+      }
+    }
+
+    // Initial width calculation
+    updateWidth()
+
+    // Add resize listener
+    const resizeObserver = new globalThis.ResizeObserver(updateWidth)
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
+
   const {
     timeRange,
     dateRange,
@@ -35,37 +60,37 @@ const Graph: React.FC = () => {
   }
 
   return (
-    <div className="page p-8">
-      <div className="w-[850px]">
-        <div className="mb-8">
-          <div className="grid grid-cols-[160px_1fr] gap-6">
-            <TimeRangeSelector
-              timeRange={timeRange}
-              dateRange={dateRange}
-              isCalendarOpen={isCalendarOpen}
-              onTimeRangeChange={handleRangeChange}
-              onDateRangeChange={handleDateRangeChange}
-              onCalendarOpenChange={setIsCalendarOpen}
-            />
-            <DurationFilter minDuration={minDuration} onDurationChange={setMinDuration} />
-          </div>
-        </div>
-
-        <div>
-          {loading ? (
-            <div className="flex justify-center items-center h-[500px] text-base text-gray-600">
-              Loading...
-            </div>
-          ) : (
-            <WorkTimeChart
-              data={chartData}
-              yAxisDomain={yAxisDomain}
-              formatYAxis={formatYAxis}
-              CustomTooltip={CustomTooltip}
-            />
-          )}
+    <div ref={containerRef}>
+      <div className="mb-8">
+        <div className="grid grid-cols-[160px_1fr] gap-6">
+          <TimeRangeSelector
+            timeRange={timeRange}
+            dateRange={dateRange}
+            isCalendarOpen={isCalendarOpen}
+            onTimeRangeChange={handleRangeChange}
+            onDateRangeChange={handleDateRangeChange}
+            onCalendarOpenChange={setIsCalendarOpen}
+          />
+          <DurationFilter minDuration={minDuration} onDurationChange={setMinDuration} />
         </div>
       </div>
+
+      {loading ? (
+        <div className="flex justify-center items-center h-[500px] text-base text-gray-600">
+          Loading...
+        </div>
+      ) : (
+        <div className="flex">
+          <WorkTimeChart
+            data={chartData}
+            yAxisDomain={yAxisDomain}
+            formatYAxis={formatYAxis}
+            CustomTooltip={CustomTooltip}
+            width={chartWidth}
+            height={chartWidth * 0.6}
+          />
+        </div>
+      )}
     </div>
   )
 }
