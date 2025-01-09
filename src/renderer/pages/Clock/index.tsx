@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import './styles.css'
-import arrow from '../../assets/arrow.png'
+import { useWorkRecords } from '@/renderer/hooks/'
 
-import { useWorkRecords } from '../../hooks/'
+import arrow from '@/renderer/assets/arrow.png'
 
 interface WorkSession {
   startTimestamp: number
@@ -62,14 +61,18 @@ const Record: React.FC<WorkSession> = ({ startTimestamp, endTimestamp }) => {
   }
 
   return (
-    <div className="record">
+    <div className="w-full">
       <h2>
-        <span className="date">{formatDate(startTimestamp)}</span>
-        <span className="day-label">{formatDay(startTimestamp)}</span>
+        <span className="text-3xl">{formatDate(startTimestamp)}</span>
+        <span className="ml-4 text-xl text-black/40">{formatDay(startTimestamp)}</span>
       </h2>
-      <div className="time-entry">
+      <div className="flex items-center gap-5 mx-8 mt-4 text-3xl">
         <span>{formatTime(startTimestamp)}</span>
-        <img className="arrow" src={arrow} alt="arrow" />
+        <img
+          className="mx-8 w-[172px] h-16 -scale-x-100 rotate-[18deg] scale-[-1]  opacity-20"
+          src={arrow}
+          alt="arrow"
+        />
         <span>{endTimestamp ? formatTime(endTimestamp) : '...'}</span>
       </div>
     </div>
@@ -168,14 +171,14 @@ const Clock: React.FC = () => {
   }
 
   return (
-    <div className="page clock-page" ref={containerRef}>
+    <div className="page flex flex-col items-start gap-10" ref={containerRef}>
       {records.map((item, index) => (
         <React.Fragment key={`${item.startTimestamp}-${index}`}>
           <Record {...item} />
-          <div className="divider" />
+          <div className="w-full h-px bg-black/10" />
         </React.Fragment>
       ))}
-      {loading && <div className="loading">Loading...</div>}
+      {loading && <div className="w-full text-center py-5 text-black/40">Loading...</div>}
     </div>
   )
 }

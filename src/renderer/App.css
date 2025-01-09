@@ -65,14 +65,12 @@
   src: url('./assets/KleeOne-Regular.ttf') format('truetype');
 }
 
-.app-container {
-  display: flex;
-  height: 100vh;
-}
+@layer components {
+  .app-container {
+    @apply flex h-screen;
+  }
 
-.content {
-  flex: 1;
-  padding: 20px 48px;
-  height: 100%;
-  overflow-y: auto;
+  .content {
+    @apply flex-1 px-12 py-5 h-full overflow-y-auto;
+  }
 }
