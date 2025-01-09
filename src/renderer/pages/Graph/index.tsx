@@ -35,34 +35,36 @@ const Graph: React.FC = () => {
   }
 
   return (
-    <div className="page">
-      <div className="mb-5 py-4">
-        <div className="grid grid-cols-[160px_1fr] gap-6">
-          <TimeRangeSelector
-            timeRange={timeRange}
-            dateRange={dateRange}
-            isCalendarOpen={isCalendarOpen}
-            onTimeRangeChange={handleRangeChange}
-            onDateRangeChange={handleDateRangeChange}
-            onCalendarOpenChange={setIsCalendarOpen}
-          />
-          <DurationFilter minDuration={minDuration} onDurationChange={setMinDuration} />
-        </div>
-      </div>
-
-      <div>
-        {loading ? (
-          <div className="flex justify-center items-center h-[400px] text-base text-gray-600">
-            Loading...
+    <div className="page p-8">
+      <div className="w-[850px]">
+        <div className="mb-8">
+          <div className="grid grid-cols-[160px_1fr] gap-6">
+            <TimeRangeSelector
+              timeRange={timeRange}
+              dateRange={dateRange}
+              isCalendarOpen={isCalendarOpen}
+              onTimeRangeChange={handleRangeChange}
+              onDateRangeChange={handleDateRangeChange}
+              onCalendarOpenChange={setIsCalendarOpen}
+            />
+            <DurationFilter minDuration={minDuration} onDurationChange={setMinDuration} />
           </div>
-        ) : (
-          <WorkTimeChart
-            data={chartData}
-            yAxisDomain={yAxisDomain}
-            formatYAxis={formatYAxis}
-            CustomTooltip={CustomTooltip}
-          />
-        )}
+        </div>
+
+        <div>
+          {loading ? (
+            <div className="flex justify-center items-center h-[500px] text-base text-gray-600">
+              Loading...
+            </div>
+          ) : (
+            <WorkTimeChart
+              data={chartData}
+              yAxisDomain={yAxisDomain}
+              formatYAxis={formatYAxis}
+              CustomTooltip={CustomTooltip}
+            />
+          )}
+        </div>
       </div>
     </div>
   )

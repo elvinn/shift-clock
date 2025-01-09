@@ -1,5 +1,6 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import dayjs from 'dayjs'
 import { ChartData } from '../types'
 import { CustomTooltipProps } from './CustomTooltip'
 
@@ -16,21 +17,47 @@ export const WorkTimeChart: React.FC<WorkTimeChartProps> = ({
   formatYAxis,
   CustomTooltip
 }) => {
+  const calculateTicks = () => {
+    const [min, max] = yAxisDomain
+    // Calculate optimal number of ticks based on chart height
+    const targetTickCount = 8
+    const range = max - min
+
+    // Calculate interval that divides range into roughly targetTickCount segments
+    let interval = Math.ceil(range / targetTickCount)
+
+    // Round interval to nearest 10 minutes for cleaner numbers
+    interval = Math.ceil(interval / 10) * 10
+
+    const ticks = []
+    for (let i = min; i <= max; i += interval) {
+      ticks.push(i)
+    }
+
+    return ticks
+  }
+
+  const formatXAxis = (dateStr: string) => {
+    const date = dayjs(dateStr)
+    const currentYear = dayjs().year()
+    return date.year() === currentYear ? date.format('MM-DD') : date.format('YYYY-MM-DD')
+  }
+
   return (
     <LineChart
       width={800}
-      height={400}
+      height={500}
       data={data}
-      margin={{ top: 5, right: 30, left: 50, bottom: 5 }}
+      margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
+      <XAxis dataKey="date" tickFormatter={formatXAxis} />
       <YAxis
         tickFormatter={formatYAxis}
         domain={yAxisDomain}
-        interval="preserveStartEnd"
-        tickCount={8}
+        ticks={calculateTicks()}
         reversed={true}
+        width={50}
       />
       <Tooltip
         content={({ active, payload, label }) => (
