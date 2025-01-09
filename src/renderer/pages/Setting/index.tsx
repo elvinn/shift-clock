@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './styles.css'
-import { Switch } from 'antd'
+import { Switch } from '@/renderer/components/ui/switch'
 
 const Setting: React.FC = () => {
   const [autoLaunch, setAutoLaunch] = useState(false)
@@ -23,7 +23,7 @@ const Setting: React.FC = () => {
         <h2 className="setting-title">Auto Launch</h2>
         <div className="setting-item">
           <span className="setting-label">Launch on startup</span>
-          <Switch checked={autoLaunch} onChange={handleAutoLaunchChange} />
+          <Switch checked={autoLaunch} onCheckedChange={handleAutoLaunchChange} />
         </div>
       </div>
     </div>
